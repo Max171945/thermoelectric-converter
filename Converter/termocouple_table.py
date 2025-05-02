@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_HALF_UP
+
 import constants
 
 
@@ -17,16 +19,24 @@ class ThermocoupleTable:
         with open(constants.THERMOCOUPLE[self.thermocouple], 'r') as file:
             for line in file:
                 line = line.replace(',', '.')
-                result.extend([float(_) for _ in line.split()])
+                result.extend([_ for _ in line.split()])
         return result
 
-    def get_thermo_emf(self, temperature):
-        pass
+    def get_thermo_emf(self, temperature: str):
+        temperature = Decimal(temperature.replace(',', '.'))
+        index_prev = int(temperature)
+        index_next = index_prev + 1
+        emf_prev = Decimal(self.data_table[index_prev])
+        emf_next = Decimal(self.data_table[index_next])
+        step = (emf_next - emf_prev)
+        delta = Decimal((temperature - index_prev))
+        return (emf_prev + step * delta).quantize(Decimal('1.000'), ROUND_HALF_UP)
 
     def get_temperature(self, thermo_emf):
         pass
 
 
 if __name__ == '__main__':
-    th = ThermocoupleTable('ТВР ВР(А)-1')
-    print(th.thermocouple, th.data_table)
+    th = ThermocoupleTable()
+    print(th.get_thermo_emf('100'))
+    print(th.get_thermo_emf('101,5'))
