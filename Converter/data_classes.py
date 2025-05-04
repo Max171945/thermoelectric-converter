@@ -5,7 +5,7 @@ from decimal import Decimal
 @dataclass
 class Measurement:
     temperature: str
-    thermo_emf: str
+    thermo_emf: Decimal
 
 
 @dataclass
