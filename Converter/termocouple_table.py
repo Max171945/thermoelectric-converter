@@ -16,6 +16,7 @@ class ThermocoupleTable:
         self.thermocouple = thermocouple if thermocouple in constants.THERMOCOUPLES else constants.DEFAULT_THERMOCOUPLE
         self.data_table = self._load_data()
 
+
     def _load_data(self):
         result = []
         with open(constants.THERMOCOUPLES[self.thermocouple], 'r') as file:
@@ -24,15 +25,13 @@ class ThermocoupleTable:
                 result.extend([Decimal(_) for _ in line.split()])
         return result
 
-    def get_thermo_emf(self, temperature: str)->Decimal:
+
+    def get_thermo_emf(self, temperature: Decimal)->Decimal:
         """
         Returns the thermal efficiency value depending on the temperature.
         Throws an exception - ThermoException
         if the temperature is outside the range of the thermocouple conversion table.
         """
-
-        temperature: Decimal = Decimal(temperature.replace(',', '.'))
-
         if not 0 <= temperature <= len(self.data_table)-1:
             raise ThermoException(
                 f'The temperature should be in the range from 0 to {len(self.data_table)-1} degrees Celsius. '
@@ -47,15 +46,13 @@ class ThermocoupleTable:
         delta = temperature - index_prev
         return (emf_prev + step * delta).quantize(Decimal('1.0000'), ROUND_HALF_UP)
 
-    def get_temperature(self, thermo_emf: str | Decimal)->Decimal:
+
+    def get_temperature(self, thermo_emf: Decimal)->Decimal:
         """
         Returns the temperature value depending on the thermo-emf.
         Throws an exception - ThermoException
         if the thermo-emf is outside the range of the thermocouple conversion table.
         """
-
-        if isinstance(thermo_emf, str):
-            thermo_emf = Decimal(thermo_emf.replace(',', '.'))
 
         if not 0 <= thermo_emf <= self.data_table[-1]:
             raise ThermoException(f'The thermo-emf should be in the range from {self.data_table[0]}'
@@ -78,8 +75,8 @@ class ThermocoupleTable:
 
 if __name__ == '__main__':
     th = ThermocoupleTable()
-    assert th.get_thermo_emf('1700') == Decimal('17.942')
+    assert th.get_thermo_emf(Decimal('1700')) == Decimal('17.942')
     assert th.get_temperature(Decimal('17.942')) == Decimal('1700')
-    assert th.get_thermo_emf('1220.5') == Decimal('12.194')
-    assert th.get_temperature('12.194') == Decimal('1220.5')
+    assert th.get_thermo_emf(Decimal('1220.5')) == Decimal('12.194')
+    assert th.get_temperature(Decimal('12.194')) == Decimal('1220.5')
 
