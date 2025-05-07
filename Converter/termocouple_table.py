@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from decimal import Decimal, ROUND_HALF_UP
 
-import constants
+from constants import THERMOCOUPLES, DEFAULT_THERMOCOUPLE
 from thermoexceptions import ThermoException
 
 
@@ -12,18 +12,22 @@ class ThermocoupleTable:
     at a free-end temperature of 0 degrees Celsius
     """
 
-    def __init__(self, thermocouple=constants.DEFAULT_THERMOCOUPLE):
-        self.thermocouple = thermocouple if thermocouple in constants.THERMOCOUPLES else constants.DEFAULT_THERMOCOUPLE
+    def __init__(self, thermocouple: str = DEFAULT_THERMOCOUPLE):
+        self.thermocouple = thermocouple
         self._data_table = self._load_data()
 
 
-    def _load_data(self):
+    def _load_data(self) -> list[Decimal]:
         result = []
-        with open(constants.THERMOCOUPLES[self.thermocouple], 'r') as file:
-            for line in file:
-                line = line.replace(',', '.')
-                result.extend([Decimal(_) for _ in line.split()])
-        return result
+        file_path = THERMOCOUPLES[self.thermocouple]
+        try:
+            with open(file_path, 'r') as file:
+                for line in file:
+                    line = line.replace(',', '.')
+                    result.extend([Decimal(_) for _ in line.split()])
+            return result
+        except FileNotFoundError:
+            raise FileNotFoundError(f'The file - {THERMOCOUPLES[self.thermocouple]}  does not exist.')
 
 
     def get_thermo_emf(self, temperature: Decimal)->Decimal:
@@ -56,7 +60,7 @@ class ThermocoupleTable:
 
         if not 0 <= thermo_emf <= self._data_table[-1]:
             raise ThermoException(f'The thermo-emf should be in the range from {self._data_table[0]}'
-                                  f' to {self._data_table[-1]} mV.'
+                                  f' to {self._data_table[-1]} mV. '
                                   f'Current thermo-emf: {thermo_emf} mV.'
             )
 
