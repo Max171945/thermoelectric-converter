@@ -16,7 +16,6 @@ class ThermocoupleTable:
         self.thermocouple = thermocouple
         self._data_table = self._load_data()
 
-
     def _load_data(self) -> list[Decimal]:
         result = []
         file_path = THERMOCOUPLES[self.thermocouple]
@@ -28,7 +27,6 @@ class ThermocoupleTable:
             return result
         except FileNotFoundError:
             raise FileNotFoundError(f'The file - {THERMOCOUPLES[self.thermocouple]}  does not exist.')
-
 
     def get_thermo_emf(self, temperature: Decimal)->Decimal:
         """
@@ -49,7 +47,6 @@ class ThermocoupleTable:
         step = emf_next - emf_prev
         delta = temperature - index_prev
         return (emf_prev + step * delta).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-
 
     def get_temperature(self, thermo_emf: Decimal)->Decimal:
         """

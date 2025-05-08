@@ -2,7 +2,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from random import gauss
 
 from decorators import try_exc
-from constants import STD_TEMP, TEMP_FREE_END, STD_TEMP_FREE_END
+from constants import STANDARD_DEVIATION_TEMP, TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END
 from data_classes import Measurement, Result
 from termocouple_table import ThermocoupleTable
 
@@ -19,14 +19,12 @@ class TEConverter:
     def __init__(self):
         self._thermocouple_table = ThermocoupleTable()
 
-
     def change_thermocouple_table(self, thermocouple: str) -> None:
         """
         Changes the type of thermocouple table used
         """
         self._thermocouple_table = ThermocoupleTable(thermocouple)
         return
-
 
     @try_exc
     def _calculate_one(self, data: Measurement) -> Result | str:
@@ -38,13 +36,11 @@ class TEConverter:
         temperature = self._thermocouple_table.get_temperature(result_thermo_emf)
         return Result(data.temperature, data.thermo_emf, correction, result_thermo_emf, temperature)
 
-
     def calculate(self, *data: Measurement) -> list[Result]:
         """
         Calculates temperatures based on the received measurement list
         """
         return [self._calculate_one(_) for _ in data]
-
 
     @try_exc
     def _generate_one(self, temp: float, temp_en: float) -> Result | str:
@@ -57,14 +53,14 @@ class TEConverter:
         result_thermo_emf = self._thermocouple_table.get_thermo_emf(temp)
         return Result(temp_en, result_thermo_emf - correction, correction, result_thermo_emf, temp)
 
-
     def generate(self, temperature: float, quantity: int = 3,
-                 std_temp: float = STD_TEMP,
+                 std_temp: float = STANDARD_DEVIATION_TEMP,
                  temp_free_end: float = TEMP_FREE_END,
-                 std_free_end: float = STD_TEMP_FREE_END) -> list[Result]:
+                 std_free_end: float = STANDARD_DEVIATION_TEMP_FREE_END) -> list[Result]:
         """
         Generates temperature calculations at multiple points.
         The quantity parameter defines the number of points.
+        The Gaussian distribution is used for generation.
         """
         temperatures = [(gauss(temperature, std_temp),  gauss(temp_free_end, std_free_end))
                         for _ in range(quantity)]

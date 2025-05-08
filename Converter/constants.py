@@ -8,5 +8,5 @@ THERMOCOUPLES: dict[str: str] = {
 
 QUANTITY: int = 3
 TEMP_FREE_END: float = 22.0
-STD_TEMP_FREE_END: float = 0.5
-STD_TEMP: float = 1.4
+STANDARD_DEVIATION_TEMP_FREE_END: float = 0.5
+STANDARD_DEVIATION_TEMP: float = 1.4
