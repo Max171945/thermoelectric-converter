@@ -18,7 +18,7 @@ class ThermocoupleTable:
 
     def _load_data(self) -> list[Decimal]:
         result = []
-        file_path = THERMOCOUPLES[self.thermocouple]
+        file_path = THERMOCOUPLES.get(self.thermocouple, '')
         try:
             with open(file_path, 'r') as file:
                 for line in file:
@@ -26,7 +26,7 @@ class ThermocoupleTable:
                     result.extend([Decimal(_) for _ in line.split()])
             return result
         except FileNotFoundError:
-            raise FileNotFoundError(f'The file - {THERMOCOUPLES[self.thermocouple]}  does not exist.')
+            raise FileNotFoundError(f'The file - {file_path}  does not exist.')
 
     def get_thermo_emf(self, temperature: Decimal)->Decimal:
         """
@@ -69,15 +69,3 @@ class ThermocoupleTable:
             delta = next_emf - prev_emf
             return (index-1 + diff/delta).quantize(Decimal('1.0'), ROUND_HALF_UP)
         return Decimal(index).quantize(Decimal('1.0'))
-
-
-
-
-
-if __name__ == '__main__':
-    th = ThermocoupleTable()
-    assert th.get_thermo_emf(Decimal('1700')) == Decimal('17.942')
-    assert th.get_temperature(Decimal('17.942')) == Decimal('1700')
-    assert th.get_thermo_emf(Decimal('1220.5')) == Decimal('12.194')
-    assert th.get_temperature(Decimal('12.194')) == Decimal('1220.5')
-

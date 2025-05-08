@@ -61,4 +61,3 @@ def out_result(results: list[str | Result]) -> str:
         message += f'∆T = {t1}°C - {t2}°C = {t1-t2}°C'
         return message
     return '\n'.join((str(res) for res in results))
-

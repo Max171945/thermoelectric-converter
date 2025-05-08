@@ -61,7 +61,7 @@ def _change_thermocouple_table(con: TEConverter) -> None:
     """
     thermocouple = input('Enter the type of thermocouple: ')
     if thermocouple in THERMOCOUPLES:
-        con.change_thermocouple_table(thermocouple)
+        thermocouple = con.change_thermocouple_table(thermocouple)
         print(f'Current type of thermocouple - {thermocouple}')
     else:
         print(f'This type of thermocouple - {thermocouple} is not supported')

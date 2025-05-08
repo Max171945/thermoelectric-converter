@@ -4,7 +4,7 @@ from random import gauss
 from decorators import try_exc
 from constants import STANDARD_DEVIATION_TEMP, TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END
 from data_classes import Measurement, Result
-from termocouple_table import ThermocoupleTable
+from thermocouple_table import ThermocoupleTable
 
 
 class TEConverter:
@@ -19,17 +19,18 @@ class TEConverter:
     def __init__(self):
         self._thermocouple_table = ThermocoupleTable()
 
-    def change_thermocouple_table(self, thermocouple: str) -> None:
+    def change_thermocouple_table(self, thermocouple: str) -> str:
         """
-        Changes the type of thermocouple table used
+        Changes the type of thermocouple table used.
+        Returns the type of thermocouple.
         """
         self._thermocouple_table = ThermocoupleTable(thermocouple)
-        return
+        return self._thermocouple_table.thermocouple
 
     @try_exc
     def _calculate_one(self, data: Measurement) -> Result | str:
         """
-        Calculates the temperature from the received measurement
+        Calculates the temperature from the received measurement.
         """
         correction = self._thermocouple_table.get_thermo_emf(data.temperature)
         result_thermo_emf = correction + data.thermo_emf
@@ -38,14 +39,14 @@ class TEConverter:
 
     def calculate(self, *data: Measurement) -> list[Result]:
         """
-        Calculates temperatures based on the received measurement list
+        Calculates temperatures based on the received measurement list.
         """
         return [self._calculate_one(_) for _ in data]
 
     @try_exc
     def _generate_one(self, temp: float, temp_en: float) -> Result | str:
         """
-        Generates a temperature calculation at a single point
+        Generates a temperature calculation at a single point.
         """
         temp = Decimal(temp).quantize(Decimal('1.0'), ROUND_HALF_UP)
         temp_en = Decimal(temp_en).quantize(Decimal('1.0'), ROUND_HALF_UP)
@@ -65,4 +66,3 @@ class TEConverter:
         temperatures = [(gauss(temperature, std_temp),  gauss(temp_free_end, std_free_end))
                         for _ in range(quantity)]
         return [self._generate_one(*temp) for temp in temperatures]
-
