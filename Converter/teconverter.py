@@ -19,6 +19,12 @@ class TEConverter:
     def __init__(self):
         self._thermocouple_table = ThermocoupleTable()
 
+    def get_thermocouple(self):
+        """
+        Returns the type of thermocouple.
+        """
+        return self._thermocouple_table.thermocouple
+
     def change_thermocouple_table(self, thermocouple: str) -> str:
         """
         Changes the type of thermocouple table used.
@@ -37,7 +43,7 @@ class TEConverter:
         temperature = self._thermocouple_table.get_temperature(result_thermo_emf)
         return Result(data.temperature, data.thermo_emf, correction, result_thermo_emf, temperature)
 
-    def calculate(self, *data: Measurement) -> list[Result]:
+    def calculate(self, *data: Measurement) -> list[Result|str]:
         """
         Calculates temperatures based on the received measurement list.
         """

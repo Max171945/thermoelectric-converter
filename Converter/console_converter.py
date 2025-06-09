@@ -1,7 +1,7 @@
 from decimal import Decimal
 from re import findall, fullmatch, search
 
-from data_classes import Measurement, out_result
+from data_classes import Measurement, Result
 from constants import QUANTITY, STANDARD_DEVIATION_TEMP, TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END, THERMOCOUPLES
 from teconverter import TEConverter
 
@@ -9,6 +9,30 @@ from teconverter import TEConverter
 # For float and int
 PATTERN: str = r'[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)'
 
+def out_result(results: list[str | Result]) -> str:
+    """
+    Creates a row for the list of results in a reasoned form.
+    If the list consists of more than just instances of the Result class,
+    then the row will consist of list objects,
+    otherwise the row will look like a table with calculated values.
+    """
+    if all([isinstance(_, Result) for _ in results]):
+        res_len = len(results)
+        lines = 25
+        message = f'{"-" * lines * res_len}\n'
+        for attr in Result.__dict__['__annotations__'].keys():
+            if attr in ('thermo_emf','result_thermo_emf','temperature'):
+                message += f'{"-" * lines * res_len}\n'
+            message += f'{attr:25}'
+            for result in results:
+                message += f'{"+" if attr == "correction" else "":1}{getattr(result, attr):8}{" " * 10}'
+            message += f'\n'
+        message += f'\n'
+
+        t1, t2 = max(results).temperature, min(results).temperature
+        message += f'∆T = {t1}°C - {t2}°C = {t1-t2}°C'
+        return message
+    return '\n'.join((str(res) for res in results))
 
 def _calculate(con: TEConverter) -> None:
     """

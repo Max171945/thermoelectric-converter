@@ -17,6 +17,10 @@ class ThermocoupleTable:
         self._data_table = self._load_data()
 
     def _load_data(self) -> list[Decimal]:
+        """
+        Loads the thermal efficiency values for a specific type of thermocouple from a file.
+        It can throw a FileNotFoundError exception if the data file does not exist.
+        """
         result = []
         file_path = THERMOCOUPLES.get(self.thermocouple, '')
         try:
@@ -36,7 +40,8 @@ class ThermocoupleTable:
         """
         if not 0 <= temperature <= len(self._data_table)-1:
             raise ThermoException(
-                f'The temperature should be in the range from 0 to {len(self._data_table)-1} degrees Celsius. '
+                f'The temperature or calculated temperature'
+                f'should be in the range from 0 to {len(self._data_table)-1} degrees Celsius. '
                 f'Current temperature: {temperature} degrees Celsius.'
             )
 
@@ -56,7 +61,8 @@ class ThermocoupleTable:
         """
 
         if not 0 <= thermo_emf <= self._data_table[-1]:
-            raise ThermoException(f'The thermo-emf should be in the range from {self._data_table[0]}'
+            raise ThermoException(f'The thermo-emf or calculated thermo-emf'
+                                  f' should be in the range from {self._data_table[0]}'
                                   f' to {self._data_table[-1]} mV. '
                                   f'Current thermo-emf: {thermo_emf} mV.'
             )
