@@ -1,4 +1,4 @@
-from thermoexceptions import ThermoException
+from Converter.thermoexceptions import ThermoException
 
 
 def try_exc(func):

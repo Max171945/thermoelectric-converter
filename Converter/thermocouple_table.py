@@ -1,8 +1,8 @@
 from bisect import bisect_left
 from decimal import Decimal, ROUND_HALF_UP
 
-from constants import THERMOCOUPLES, DEFAULT_THERMOCOUPLE
-from thermoexceptions import ThermoException
+from Converter.constants import THERMOCOUPLES, DEFAULT_THERMOCOUPLE
+from Converter.thermoexceptions import ThermoException
 
 
 class ThermocoupleTable:

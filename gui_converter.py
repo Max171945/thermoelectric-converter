@@ -5,9 +5,9 @@ import wx
 from wx.lib.agw.buttonpanel import BoxSizer
 
 from Converter.constants import TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END
-from constants import THERMOCOUPLES, DEFAULT_THERMOCOUPLE, QUANTITY, STANDARD_DEVIATION_TEMP
-from data_classes import Measurement, Result
-from teconverter import TEConverter
+from Converter.constants import THERMOCOUPLES, DEFAULT_THERMOCOUPLE, QUANTITY, STANDARD_DEVIATION_TEMP
+from Converter.data_classes import Measurement, Result
+from Converter.teconverter import TEConverter
 
 LINKS: list[str] = list(THERMOCOUPLES.keys())
 DEFAULT_INDEX = LINKS.index(DEFAULT_THERMOCOUPLE)

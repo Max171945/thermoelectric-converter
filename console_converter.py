@@ -1,9 +1,10 @@
 from decimal import Decimal
 from re import findall, fullmatch, search
 
-from data_classes import Measurement, Result
-from constants import QUANTITY, STANDARD_DEVIATION_TEMP, TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END, THERMOCOUPLES
-from teconverter import TEConverter
+from Converter.data_classes import Measurement, Result
+from Converter.constants import (QUANTITY, STANDARD_DEVIATION_TEMP, TEMP_FREE_END,
+                                 STANDARD_DEVIATION_TEMP_FREE_END, THERMOCOUPLES)
+from Converter.teconverter import TEConverter
 
 
 # For float and int

@@ -1,10 +1,10 @@
 from decimal import Decimal, ROUND_HALF_UP
 from random import gauss
 
-from decorators import try_exc
-from constants import STANDARD_DEVIATION_TEMP, TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END
-from data_classes import Measurement, Result
-from thermocouple_table import ThermocoupleTable
+from Converter.decorators import try_exc
+from Converter.constants import STANDARD_DEVIATION_TEMP, TEMP_FREE_END, STANDARD_DEVIATION_TEMP_FREE_END
+from Converter.data_classes import Measurement, Result
+from Converter.thermocouple_table import ThermocoupleTable
 
 
 class TEConverter:

@@ -1,10 +1,10 @@
 import unittest
 from decimal import Decimal
 
-from data_classes import Result, Measurement
-from teconverter import TEConverter
-from thermoexceptions import ThermoException
-from thermocouple_table import ThermocoupleTable
+from Converter.data_classes import Result, Measurement
+from Converter.teconverter import TEConverter
+from Converter.thermoexceptions import ThermoException
+from Converter.thermocouple_table import ThermocoupleTable
 
 
 class TermocoupleTableTest(unittest.TestCase):
