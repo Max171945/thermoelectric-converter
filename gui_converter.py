@@ -443,8 +443,12 @@ class TEConverterFrame(wx.Frame):
         tabs.InsertPage(1, self.generate_panel, 'Generate')
 
 
-if __name__ == '__main__':
+def gui_main():
     app = wx.App()
     frame = TEConverterFrame(parent=None, title='TEConverter')
     frame.Show()
     app.MainLoop()
+
+
+if __name__ == '__main__':
+   gui_main()

@@ -113,9 +113,12 @@ def console_converter(con: TEConverter) -> None:
             case _:
                 print(f'The {cmd} command is not supported')
 
-if __name__ == '__main__':
+def console_main():
     try:
         converter = TEConverter()
         console_converter(converter)
     except (Exception, KeyboardInterrupt) as exc:
         print(exc)
+
+if __name__ == '__main__':
+    console_main()
