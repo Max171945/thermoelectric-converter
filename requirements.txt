@@ -1,0 +1,8 @@
+cx_Freeze==8.3.0
+filelock==3.18.0
+numpy==2.2.6
+packaging==25.0
+patchelf==0.17.2.2
+tomli==2.2.1
+typing_extensions==4.13.2
+wxPython==4.2.3
